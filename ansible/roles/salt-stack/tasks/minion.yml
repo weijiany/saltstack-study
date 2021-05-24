@@ -1,0 +1,13 @@
+- name: install salt minion
+  apt:
+    name: salt-minion
+    state: present
+  
+
+
+- name: copy minion file
+  ansible.builtin.template:
+    src: minion.j2
+    dest: /etc/salt/minion
+  notify:
+    - restart minion

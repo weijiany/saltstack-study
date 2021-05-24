@@ -1,0 +1,11 @@
+- name: install salt master
+  apt:
+    name: salt-master
+    state: present
+
+- name: copy master file
+  template:
+    src: master.j2
+    dest: /etc/salt/master
+  notify: 
+    - restart master

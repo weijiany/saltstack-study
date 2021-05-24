@@ -1,0 +1,12 @@
+---
+# handlers file for salt-stack
+
+- name: restart master
+  ansible.builtin.service:
+    name: salt-master
+    state: restarted
+
+- name: restart minion
+  ansible.builtin.service:
+    name: salt-minion
+    state: restarted

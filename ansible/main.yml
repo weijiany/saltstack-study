@@ -1,0 +1,10 @@
+---
+- hosts: master
+  roles:
+    - role: salt-stack
+      node_type: master
+
+- hosts: slave
+  roles:
+    - role: salt-stack
+      node_type: minion

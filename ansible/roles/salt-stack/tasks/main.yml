@@ -1,0 +1,13 @@
+---
+# tasks file for salt-stack
+- name: update apt cache
+  apt:
+    update_cache: yes
+
+# - debug: "var=hostvars['master']['ansible_default_ipv4']['address']"
+
+- include: master.yml
+  when: node_type == 'master'
+
+- include: minion.yml
+  when: node_type == 'minion'
