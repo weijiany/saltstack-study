@@ -115,4 +115,46 @@ apache: httpd
 
 - 查看执行的历史命令: salt-run jobs.list_jobs
 - 查看历史命令的输出: salt-run jobs.lookup_jid 20210605021956477358
+ 
+### salt master 分发文件
+
+salt '*' cp.get_file salt://[salt master file] [remote file], 默认会去 /srv/salt 下找 master 文件
+
+salt-cp [salt master file] [remote file]
+
+## 配置管理
+
+salt 使用 sls 文件进行配置的管理，默认路径为：srv/salt
+
+salt state 文件 top.sls
+```yaml
+base:
+  '*':
+    - apache # 为对应模块的名字，模块下 init.sls 为默认配置文件
+```
+
+apache init.sls 配置文件
+```yaml
+apache:
+  pkg.installed:
+    - name: apache2
+  file.managed: # 保证文件存在
+    - names: # copy 多个文件
+        - /etc/apache2/apache2.conf:
+            - source: salt://apache/httpd.conf
+        - /etc/apache2/ports.conf:
+            - source: salt://apache/ports.conf
+    - require: # 当 apache 模块的的 pkg 执行成功时，会触发当前 file.managed
+        - pkg: apache # 第一行模块名
+    - template: jinja # 指定渲染引擎
+    - context: # 变量
+        port: 8080
+  service.running:
+    - name: apache2
+    - enable: True
+    - watch: # 当 apache 模块下的 file 发生变化，会执行 service.running
+        - file: apache
+
+```
+
 
