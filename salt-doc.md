@@ -65,3 +65,54 @@ apache: httpd
     - 变量: 差异化信息
     - 其他任何数据
     - 可以在 target 和 state 中使用
+
+### salt 匹配规则
+
+- Globing: 默认匹配规则
+  - salt '*' 匹配所有
+  - salt '192.168.1.* test.ping' 匹配 minion id 中以 192.168.1 开头的
+  - salt 'web[1-5] test.ping' 匹配 web1 到 web5
+  - salt 'web[1,5] test.ping' 匹配 web1 和 web5
+- 正则表达式
+  - salt -E 'web-(dev|qa)' 匹配 web-dev 和 web-qa
+  
+  top file:
+  ```salt
+  base:
+    'web-(dev|qa)':
+      - match: pcre
+      - packages
+  ```
+- List: 列表
+  - salt -L 'web1,web2' 匹配 web1 和 web2
+- Grains
+  - salt -G 'os:Ubuntu' 匹配 grains 中 os 值为 Ubuntu
+
+  top file:
+  ```salt
+  base:
+    'os:Ubuntu':
+      - match: grain
+      - packages
+  ```
+- Pillar
+  - salt -I 'roles:dev' 匹配 pillar 中 roles 值为 dev
+- NodeGroup
+  - salt -N 'web' 匹配 master 配置文件中，node group 为 web
+    top file:
+  ```salt
+  base:
+    'web':
+      - match: nodeGroup
+      - packages
+  ```
+
+### batch size
+
+执行命令时，不想一次影响所有的机器，可以使用 `salt '*' -b 10/10% test.ping` -b 同时运行的 minion 数量/百分比
+
+### salt 历史
+
+- 查看执行的历史命令: salt-run jobs.list_jobs
+- 查看历史命令的输出: salt-run jobs.lookup_jid 20210605021956477358
+
