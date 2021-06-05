@@ -51,6 +51,8 @@ base:
 
 pillar.sls:
 ```salt
+# pillar 可以直接使用 grains
+# grains 在 minion 启动时候加载，而 pillar 在 master 执行 refresh_pillar 时，加载
 {% if grains['os'] == 'Ubuntu' %}
 apache: httpd
 {% endif %}

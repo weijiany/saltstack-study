@@ -7,5 +7,25 @@
   template:
     src: master.j2
     dest: /etc/salt/master
-  notify: 
+  notify:
     - restart master
+
+- name: copy pillalr top file
+  ansible.builtin.copy:
+    src: pillar/top.sls
+    dest: /srv/pillar/top.sls
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  notify:
+    - sync pillar to minion
+
+- name: copy pillalr packages file
+  ansible.builtin.copy:
+    src: pillar/packages.sls
+    dest: /srv/pillar/packages.sls
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  notify:
+    - sync pillar to minion

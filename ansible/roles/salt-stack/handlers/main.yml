@@ -10,3 +10,6 @@
   ansible.builtin.service:
     name: salt-minion
     state: restarted
+
+- name: sync pillar to minion
+  ansible.builtin.shell: salt '*' saltutil.refresh_pillar
