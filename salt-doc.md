@@ -155,5 +155,19 @@ apache:
     - watch: # 当 apache 模块下的 file 发生变化，会执行 service.running
         - file: apache
 ```
+## schedule
 
+定时任务，salt 定时任务通过 pillar 在 minion 上实现。
 
+例：每 10s 在 /tmp/hello 文件中追加 hello
+
+在 pillar 下添加下面的配置，并同时在 top.sls 文件中引入
+
+```yaml
+schedule:
+  hello:
+    function: cmd.run # 
+    seconds: 10
+    args:
+      - "echo hello >> /tmp/hello"
+```
