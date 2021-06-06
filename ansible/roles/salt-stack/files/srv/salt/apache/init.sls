@@ -11,7 +11,7 @@ apache:
         - pkg: apache
     - template: jinja
     - context:
-        port: 8080
+        port: {{ salt['pillar.get']('apache:port') }}
   service.running:
     - name: apache2
     - enable: True

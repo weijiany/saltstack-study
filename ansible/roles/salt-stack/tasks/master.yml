@@ -10,19 +10,18 @@
   notify:
     - restart master
 
-#- name: copy pillalr packages file
-#  ansible.builtin.copy:
-#    src: pillar/packages.sls
-#    dest: /srv/pillar/packages.sls
-#    owner: root
-#    group: root
-#    mode: u=rw,g=r,o=r
-#  notify:
-#    - sync pillar to minion
+- name: copy pillar dir master
+  ansible.builtin.copy:
+    src: srv/pillar/
+    dest: /srv/pillar/
+    owner: root
+    group: root
+  notify:
+    - sync pillar to minion
 
 - name: copy salt dir to master
   ansible.builtin.copy:
-    src: salt/
+    src: srv/salt/
     dest: /srv/salt/
     owner: root
     group: root

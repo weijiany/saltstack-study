@@ -148,13 +148,12 @@ apache:
         - pkg: apache # 第一行模块名
     - template: jinja # 指定渲染引擎
     - context: # 变量
-        port: 8080
+        port: {{ salt['pillar.get']('apache:port') }} # 使用 salt 内置 pillar get 方法获取 minion pillar 信息作为参数
   service.running:
     - name: apache2
     - enable: True
     - watch: # 当 apache 模块下的 file 发生变化，会执行 service.running
         - file: apache
-
 ```
 
 
